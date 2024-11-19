@@ -89,7 +89,11 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public V set(K key, V value) {
-    return null;        // STUB
+    if (key == null) {
+      throw new NullPointerException("null key");
+    }
+    BSTNode<K, V> newNode = set(root, key, value);
+    return newNode.value;
   } // set(K, V)
 
   /**
@@ -230,6 +234,41 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
   // +---------+-----------------------------------------------------
   // | Helpers |
   // +---------+
+/**
+   * Set the value associated with a key in a subtree rooted at node.  See the
+   * top-level get for more details.
+   *
+   * @param key
+   *   The key to set.
+   * @param node
+   *   The root of the subtree to look through.
+   * @param value
+   *    The value to set the key to.
+   * @return
+   *   The corresponding value.
+   *
+   * @throws IndexOutOfBoundsException
+   *   when the key is not in the subtree.
+   */
+  BSTNode<K, V> set(BSTNode<K, V> node, K key,  V value) {
+    if (node == null) {
+      return new BSTNode<K, V>(key, value);
+    } // if
+    int comp = order.compare(key, node.key);
+    if (comp == 0) {
+      cachedValue = node.value;
+      node.value = value;
+      return node;
+    } else if (comp < 0) {
+      node.left = set(node.left, key, value);
+    } else {
+      node.right = set(node.right, key, value);
+    } // if/else
+
+    
+    
+  } // get(K, BSTNode<K, V>)
+
 
   /**
    * Dump a portion of the tree to some output location.
