@@ -3,6 +3,7 @@ package edu.grinnell.csc207.util;
 import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 import java.util.function.BiConsumer;
 
@@ -122,7 +123,7 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public int size() {
-    return 0;           // STUB
+    return this.size;
   } // size()
 
   /**
@@ -266,9 +267,6 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
       node.right = set(node.right, key, value);
       return node;
     } // if/else
-
-
-    
   } // get(K, BSTNode<K, V>)
 
 
@@ -342,10 +340,19 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
       } // hasNext()
 
       @Override
-      public BSTNode<K, V> next() {
+      public BSTNode<K, V> next() throws NoSuchElementException{
         checkInit();
-        // STUB
-        return null;
+        if (!this.hasNext()) {
+          throw new NoSuchElementException();
+        } //endif
+        stack.pop();
+        if(SimpleBST.this.root.right != null) {
+          root = SimpleBST.this.root.right;
+        } else if(SimpleBST.this.root.left != null) {
+          root = SimpleBST.this.root.left;
+        } //endif
+        stack.push(SimpleBST.this.root);
+        return root;
       } // next();
 
       void checkInit() {
